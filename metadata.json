@@ -1,0 +1,6 @@
+{
+  "name": "elife",
+  "description": "Catalogo oficial e landing page da elife activewear. Ative seus movimentos com elegancia, conforto e performance.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

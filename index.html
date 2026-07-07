@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>elife | Activate Your Moves</title>
+    <script>
+      if (typeof window !== 'undefined') {
+        // Mock React DevTools hook to prevent "Expected static flag was missing" crash in iframe views
+        window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
+          isDisabled: true,
+          supportsFiber: true,
+          inject: function() {},
+          onCommitFiberRoot: function() {},
+          onCommitFiberUnmount: function() {}
+        };
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
