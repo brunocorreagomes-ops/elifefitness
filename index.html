@@ -4,32 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>elife | Activate Your Moves</title>
-    <script>
-      (function() {
-        if (typeof window !== 'undefined') {
-          // If React DevTools is already injected by the browser extension, disable and silence it
-          if (window.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
-            window.__REACT_DEVTOOLS_GLOBAL_HOOK__.isDisabled = true;
-            for (var key in window.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
-              if (typeof window.__REACT_DEVTOOLS_GLOBAL_HOOK__[key] === 'function') {
-                window.__REACT_DEVTOOLS_GLOBAL_HOOK__[key] = function() {};
-              }
-            }
-          } else {
-            // Otherwise, pre-emptively define a mock hook to prevent any downstream injection/crashes
-            window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = {
-              isDisabled: true,
-              supportsFiber: true,
-              inject: function() {},
-              onCommitFiberRoot: function() {},
-              onCommitFiberUnmount: function() {},
-              onScheduleFiberRoot: function() {},
-              renderers: new Map()
-            };
-          }
-        }
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>
