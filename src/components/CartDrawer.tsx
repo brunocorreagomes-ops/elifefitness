@@ -296,7 +296,7 @@ export default function CartDrawer({ isOpen, onClose, cartItems, onUpdateQuantit
 
               <button
                 onClick={handleCheckout}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-dark text-white text-sm font-bold py-4 px-4 shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-[1.01] cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold uppercase tracking-widest py-4 px-4 shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-[1.01] cursor-pointer"
               >
                 <MessageSquare className="h-5 w-5" />
                 Finalizar no WhatsApp

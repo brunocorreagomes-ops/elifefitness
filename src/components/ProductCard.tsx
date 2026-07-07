@@ -170,7 +170,7 @@ export default function ProductCard({ product, onAddToCart, onQuickView }: Produ
               <button
                 onClick={handleAddToCart}
                 disabled={!selectedSize}
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary/10 hover:bg-primary hover:text-white text-primary text-xs font-bold py-3 px-3 transition-all duration-300 cursor-pointer disabled:opacity-50"
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-primary/10 hover:bg-primary hover:text-white text-primary text-[10px] font-bold uppercase tracking-wider py-3 px-3 transition-all duration-300 cursor-pointer disabled:opacity-50"
               >
                 <ShoppingBag className="h-4 w-4" />
                 Adicionar

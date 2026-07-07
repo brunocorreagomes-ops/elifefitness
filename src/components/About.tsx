@@ -71,7 +71,7 @@ export default function About() {
                   <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
                     {pillar.icon}
                   </div>
-                  <h3 className="text-sm font-semibold text-deep-teal tracking-wide">{pillar.title}</h3>
+                  <h3 className="text-xs font-bold text-deep-teal uppercase tracking-widest">{pillar.title}</h3>
                   <p className="text-xs text-deep-teal/70 font-light leading-relaxed">{pillar.desc}</p>
                 </div>
               ))}

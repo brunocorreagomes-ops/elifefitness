@@ -189,9 +189,9 @@ export default function App() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`text-xs font-semibold px-4 py-2.5 rounded-lg whitespace-nowrap transition-all duration-200 cursor-pointer ${
+                  className={`text-[10px] font-bold uppercase tracking-widest px-4 py-2.5 rounded-lg whitespace-nowrap transition-all duration-200 cursor-pointer ${
                     selectedCategory === category
-                      ? "bg-primary text-white shadow-sm"
+                      ? "bg-primary text-white shadow-sm font-extrabold"
                       : "bg-gray-50 text-deep-teal/70 hover:bg-gray-100"
                   }`}
                 >
@@ -237,7 +237,7 @@ export default function App() {
                   setSelectedCategory("Todos");
                   setSearchQuery("");
                 }}
-                className="rounded-lg bg-primary text-white font-bold text-xs px-5 py-2.5 hover:bg-primary-dark transition-colors cursor-pointer"
+                className="rounded-lg bg-primary text-white font-extrabold text-[10px] uppercase tracking-widest px-5 py-3 hover:bg-primary-dark transition-colors cursor-pointer"
               >
                 Limpar Filtros
               </button>

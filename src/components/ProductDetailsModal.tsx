@@ -219,7 +219,7 @@ export default function ProductDetailsModal({ product, onClose, onAddToCart }: P
                 <button
                   onClick={handleAddToCart}
                   disabled={!selectedSize}
-                  className="flex-1 inline-flex items-center justify-center gap-3 rounded-xl bg-primary hover:bg-primary-dark text-white text-sm font-bold py-4 px-6 shadow-lg shadow-primary/25 transition-all duration-300 hover:scale-[1.01] cursor-pointer disabled:opacity-50"
+                  className="flex-1 inline-flex items-center justify-center gap-3 rounded-xl bg-primary hover:bg-primary-dark text-white text-xs font-bold uppercase tracking-widest py-4 px-6 shadow-lg shadow-primary/25 transition-all duration-300 hover:scale-[1.01] cursor-pointer disabled:opacity-50"
                 >
                   <ShoppingBag className="h-5 w-5" />
                   Adicionar ao Carrinho
