@@ -1,5 +1,5 @@
 import React from "react";
-import { Search, Sparkles, Filter, RefreshCw, ShoppingBag, SlidersHorizontal, ArrowUpDown, X, Check, Eye, Tag, TrendingUp, Clock, Percent, MessageSquare, Truck } from "lucide-react";
+import { Search, Sparkles, Filter, RefreshCw, ShoppingBag, SlidersHorizontal, ArrowUpDown, X, Check, Eye, Tag, TrendingUp, Clock, Percent, MessageSquare, Truck, Instagram } from "lucide-react";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import CategoryGrid from "./components/CategoryGrid";
@@ -39,6 +39,7 @@ export const getProductColors = (id: string): string[] => {
 
 export default function App() {
   // Navigation & UI States
+  const [currentPath, setCurrentPath] = React.useState(window.location.pathname);
   const [activeSection, setActiveSection] = React.useState("home");
   const [selectedCategory, setSelectedCategory] = React.useState("Todos");
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -51,6 +52,45 @@ export default function App() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = React.useState(false);
   const [showAdvanced, setShowAdvanced] = React.useState(false);
   const [isSticky, setIsSticky] = React.useState(false);
+
+  // SPA Routing handlers
+  React.useEffect(() => {
+    const handlePopState = () => {
+      setCurrentPath(window.location.pathname);
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  React.useEffect(() => {
+    if (currentPath === "/colecao" || currentPath.startsWith("/produto/")) {
+      setActiveSection("collection");
+    } else if (currentPath === "/" || currentPath === "/home") {
+      setActiveSection("home");
+    }
+  }, [currentPath]);
+
+  const navigateTo = (path: string) => {
+    window.history.pushState({}, "", path);
+    setCurrentPath(path);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const urlProduct = React.useMemo(() => {
+    if (currentPath.startsWith("/produto/")) {
+      const slug = currentPath.substring("/produto/".length);
+      return PRODUCTS_DATA.find(p => p.id === slug) || null;
+    }
+    return null;
+  }, [currentPath]);
+
+  const handleCloseProductModal = () => {
+    if (currentPath.startsWith("/produto/")) {
+      navigateTo("/colecao");
+    } else {
+      setQuickViewProduct(null);
+    }
+  };
 
   // Dynamic counts of products in each category for superior navigation UX
   const categoryCounts = React.useMemo(() => {
@@ -90,30 +130,36 @@ export default function App() {
   // Handle active section & sticky filter on scroll
   React.useEffect(() => {
     const handleScroll = () => {
-      // 1. Active section logic
-      const sections = ["home", "collection", "about", "contact"];
-      const scrollPos = window.scrollY + 120;
+      const isHome = window.location.pathname === "/" || window.location.pathname === "/home";
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetHeight = element.offsetHeight;
-          if (scrollPos >= offsetTop && scrollPos < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
+      // 1. Active section logic
+      if (isHome) {
+        const sections = ["home", "about", "contact"];
+        const scrollPos = window.scrollY + 120;
+
+        for (const section of sections) {
+          const element = document.getElementById(section);
+          if (element) {
+            const offsetTop = element.offsetTop;
+            const offsetHeight = element.offsetHeight;
+            if (scrollPos >= offsetTop && scrollPos < offsetTop + offsetHeight) {
+              setActiveSection(section);
+              break;
+            }
           }
         }
+      } else {
+        setActiveSection("collection");
       }
 
       // 2. Sticky filter logic
       const filterElement = document.getElementById("collection-filters");
-      if (filterElement) {
+      if (filterElement && !isHome) {
         const rect = filterElement.getBoundingClientRect();
         // Enable sticky when the top of the filter section has scrolled past the header height (80px)
         setIsSticky(rect.top < 80);
       } else {
-        setIsSticky(window.scrollY > 450);
+        setIsSticky(false);
       }
     };
 
@@ -122,14 +168,34 @@ export default function App() {
   }, []);
 
   const handleNavigate = (id: string) => {
-    setActiveSection(id);
-    const element = document.getElementById(id);
-    if (element) {
-      const offset = element.offsetTop - 70; // Header height compensation
-      window.scrollTo({
-        top: offset,
-        behavior: "smooth"
-      });
+    if (id === "home") {
+      navigateTo("/");
+    } else if (id === "collection") {
+      navigateTo("/colecao");
+    } else if (id === "about" || id === "contact") {
+      if (window.location.pathname !== "/") {
+        window.history.pushState({}, "", "/");
+        setCurrentPath("/");
+        setTimeout(() => {
+          const element = document.getElementById(id);
+          if (element) {
+            const offset = element.offsetTop - 70; // Header height compensation
+            window.scrollTo({
+              top: offset,
+              behavior: "smooth"
+            });
+          }
+        }, 150);
+      } else {
+        const element = document.getElementById(id);
+        if (element) {
+          const offset = element.offsetTop - 70; // Header height compensation
+          window.scrollTo({
+            top: offset,
+            behavior: "smooth"
+          });
+        }
+      }
     }
   };
 
@@ -281,128 +347,290 @@ export default function App() {
       />
 
       {/* Sticky Compact Filter Bar */}
-      <div 
-        className={`fixed top-[80px] left-0 right-0 z-30 bg-white border-b border-deep-teal/5 shadow-md transition-all duration-300 transform ${
-          isSticky ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
-        }`}
-      >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">
-          
-          {/* Left: Small Search Bar */}
-          <div className="relative w-40 sm:w-64 text-left">
-            <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-deep-teal/40">
-              <Search className="h-3.5 w-3.5" />
-            </span>
-            <input
-              type="text"
-              placeholder="Buscar..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs pl-8.5 pr-8 py-1.5 rounded-full bg-[#f8f9f9] border border-transparent text-deep-teal placeholder-deep-teal/40 focus:outline-none focus:border-primary/40 focus:bg-white transition-all duration-300 shadow-inner"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => setSearchQuery("")}
-                className="absolute inset-y-0 right-2.5 flex items-center text-deep-teal/40 hover:text-deep-teal transition-colors"
-              >
-                <X className="h-3 w-3" />
-              </button>
-            )}
-          </div>
-
-          {/* Center: Main Chips */}
-          <div className="hidden sm:flex items-center gap-1.5 overflow-x-auto scrollbar-none">
-            {["Todos", "Top", "Shorts", "Legging"].map((cat) => {
-              const isSelected = selectedCategory === cat;
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`text-xs font-semibold px-3.5 py-1 rounded-full border border-transparent transition-all cursor-pointer ${
-                    isSelected
-                      ? "bg-primary text-white shadow-sm"
-                      : "bg-[#f8f9f9] text-deep-teal/70 hover:bg-[#edf2f0] hover:text-deep-teal"
-                  }`}
-                >
-                  {cat}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Right: Filtros Button & Counter */}
-          <div className="flex items-center gap-3 shrink-0">
-            <span className="text-xs font-semibold text-deep-teal font-mono">
-              {hasActiveFilters ? `${filteredProducts.length} produtos encontrados` : `${filteredProducts.length} produtos`}
-            </span>
-
-            <button
-              onClick={() => {
-                handleNavigate("collection");
-                setShowAdvanced(true);
-              }}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-deep-teal/10 text-xs font-bold uppercase tracking-wider text-deep-teal hover:bg-gray-50 transition-colors cursor-pointer"
-            >
-              <SlidersHorizontal className="h-3.5 w-3.5" />
-              <span className="hidden xs:inline">Filtros</span>
-            </button>
-          </div>
-
-        </div>
-      </div>
-
-      {/* Hero Section */}
-      <Hero onExploreClick={() => handleNavigate("collection")} />
-
-      {/* Trust Strip (Faixa de Confiança) */}
-      <div className="bg-white border-y border-gray-100 py-6 sm:py-8">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+      {(currentPath === "/colecao" || currentPath.startsWith("/produto/")) && (
+        <div 
+          className={`fixed top-[80px] left-0 right-0 z-30 bg-white border-b border-deep-teal/5 shadow-md transition-all duration-300 transform ${
+            isSticky ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 pointer-events-none"
+          }`}
+        >
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between gap-4">
             
-            <div className="flex items-center gap-4 py-2 md:py-0 md:px-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
-                <MessageSquare className="h-5.5 w-5.5" />
-              </div>
-              <div className="text-left">
-                <h4 className="text-sm font-bold text-deep-teal">Atendimento direto pelo WhatsApp</h4>
-                <p className="text-xs text-deep-teal/60 font-light mt-0.5">Suporte rápido e humanizado para suas compras</p>
-              </div>
+            {/* Left: Small Search Bar */}
+            <div className="relative w-40 sm:w-64 text-left">
+              <span className="absolute inset-y-0 left-3 flex items-center pointer-events-none text-deep-teal/40">
+                <Search className="h-3.5 w-3.5" />
+              </span>
+              <input
+                type="text"
+                placeholder="Buscar..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full text-xs pl-8.5 pr-8 py-1.5 rounded-full bg-[#f8f9f9] border border-transparent text-deep-teal placeholder-deep-teal/40 focus:outline-none focus:border-primary/40 focus:bg-white transition-all duration-300 shadow-inner"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute inset-y-0 right-2.5 flex items-center text-deep-teal/40 hover:text-deep-teal transition-colors"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              )}
             </div>
 
-            <div className="flex items-center gap-4 pt-4 md:pt-0 md:px-8">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
-                <Truck className="h-5.5 w-5.5" />
-              </div>
-              <div className="text-left">
-                <h4 className="text-sm font-bold text-deep-teal">Pronta entrega em Indaiatuba</h4>
-                <p className="text-xs text-deep-teal/60 font-light mt-0.5">Receba suas peças preferidas de forma imediata</p>
-              </div>
+            {/* Center: Main Chips */}
+            <div className="hidden sm:flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+              {["Todos", "Top", "Shorts", "Legging"].map((cat) => {
+                const isSelected = selectedCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`text-xs font-semibold px-3.5 py-1 rounded-full border border-transparent transition-all cursor-pointer ${
+                      isSelected
+                        ? "bg-primary text-white shadow-sm"
+                        : "bg-[#f8f9f9] text-deep-teal/70 hover:bg-[#edf2f0] hover:text-deep-teal"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="flex items-center gap-4 pt-4 md:pt-0 md:px-8">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
-                <Sparkles className="h-5.5 w-5.5" />
-              </div>
-              <div className="text-left">
-                <h4 className="text-sm font-bold text-deep-teal">Peças selecionadas para treino real</h4>
-                <p className="text-xs text-deep-teal/60 font-light mt-0.5">Testadas para oferecer zero transparência e alta durabilidade</p>
-              </div>
+            {/* Right: Filtros Button & Counter */}
+            <div className="flex items-center gap-3 shrink-0">
+              <span className="text-xs font-semibold text-deep-teal font-mono">
+                {hasActiveFilters ? `${filteredProducts.length} produtos encontrados` : `${filteredProducts.length} produtos`}
+              </span>
+
+              <button
+                onClick={() => {
+                  handleNavigate("collection");
+                  setShowAdvanced(true);
+                }}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-deep-teal/10 text-xs font-bold uppercase tracking-wider text-deep-teal hover:bg-gray-50 transition-colors cursor-pointer"
+              >
+                <SlidersHorizontal className="h-3.5 w-3.5" />
+                <span className="hidden xs:inline">Filtros</span>
+              </button>
             </div>
 
           </div>
         </div>
-      </div>
+      )}
 
-      {/* Category Grid (Categorias por imagem) */}
-      <CategoryGrid 
-        onCategorySelect={(category) => {
-          setSelectedCategory(category);
-          handleNavigate("collection");
-        }} 
-      />
+      {/* Dynamic Content Sections */}
+      {(() => {
+        const isHome = currentPath === "/" || currentPath === "/home";
 
-      {/* Main Catalog Section */}
-      <main id="collection" className="flex-1 py-8 md:py-10 bg-gray-50/50">
+        if (isHome) {
+          return (
+            <>
+              {/* Hero Section */}
+              <Hero onExploreClick={() => navigateTo("/colecao")} />
+
+              {/* Trust Strip (Faixa de Confiança) */}
+              <div className="bg-white border-y border-gray-100 py-6 sm:py-8">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+                    
+                    <div className="flex items-center gap-4 py-2 md:py-0 md:px-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
+                        <MessageSquare className="h-5.5 w-5.5" />
+                      </div>
+                      <div className="text-left">
+                        <h4 className="text-sm font-bold text-deep-teal">Atendimento direto pelo WhatsApp</h4>
+                        <p className="text-xs text-deep-teal/60 font-light mt-0.5">Suporte rápido e humanizado para suas compras</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 pt-4 md:pt-0 md:px-8">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
+                        <Truck className="h-5.5 w-5.5" />
+                      </div>
+                      <div className="text-left">
+                        <h4 className="text-sm font-bold text-deep-teal">Pronta entrega em Indaiatuba</h4>
+                        <p className="text-xs text-deep-teal/60 font-light mt-0.5">Receba suas peças preferidas de forma imediata</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 pt-4 md:pt-0 md:px-8">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
+                        <Sparkles className="h-5.5 w-5.5" />
+                      </div>
+                      <div className="text-left">
+                        <h4 className="text-sm font-bold text-deep-teal">Peças selecionadas para treino real</h4>
+                        <p className="text-xs text-deep-teal/60 font-light mt-0.5">Testadas para oferecer zero transparência e alta durabilidade</p>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+
+              {/* Category Grid (Categorias por imagem) */}
+              <CategoryGrid 
+                onCategorySelect={(category) => {
+                  setSelectedCategory(category);
+                  navigateTo("/colecao");
+                }} 
+              />
+
+              {/* Seção Mais Vendidos */}
+              <section className="py-16 bg-gray-50/50">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-10">
+                  <FadeIn direction="up" delay={0.1}>
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold uppercase tracking-widest text-primary">Favoritos da comunidade</span>
+                      <h2 className="text-3xl font-extrabold text-deep-teal">Mais Vendidos</h2>
+                      <p className="text-sm text-deep-teal/60 font-light max-w-lg mx-auto">
+                        Descubra as peças preferidas das nossas clientes para treinar com máxima segurança e estilo.
+                      </p>
+                    </div>
+                  </FadeIn>
+
+                  <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {PRODUCTS_DATA.filter(p => p.destaque).slice(0, 8).map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        onAddToCart={handleAddToCart}
+                        onQuickView={(p) => navigateTo(`/produto/${p.id}`)}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="pt-6">
+                    <button
+                      onClick={() => navigateTo("/colecao")}
+                      className="inline-flex items-center gap-2 rounded-full bg-deep-teal px-8 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-md hover:bg-[#0f6b64] hover:scale-[1.01] transition-all cursor-pointer"
+                    >
+                      Ver coleção completa
+                      <span>→</span>
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              {/* Banner Institucional */}
+              <section className="relative overflow-hidden bg-deep-teal text-white py-20 lg:py-28">
+                {/* Visual Accent Overlay */}
+                <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#14b8a6_1px,transparent_1px)] [background-size:16px_16px]" />
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    <div className="lg:col-span-7 text-left space-y-6">
+                      <span className="text-xs font-bold uppercase tracking-widest text-primary">Estilo de Vida Ativo</span>
+                      <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
+                        Moda fitness feita para valorizar suas curvas e resistir ao treino real.
+                      </h2>
+                      <p className="text-sm sm:text-base text-white/80 font-light leading-relaxed max-w-xl">
+                        Nossas peças são desenvolvidas com tecidos de tecnologia superior, toque gelado, proteção UV e compressão na medida certa. Sinta-se confiante, confortável e elegante dentro e fora do treino.
+                      </p>
+                      <div className="pt-2">
+                        <button
+                          onClick={() => navigateTo("/colecao")}
+                          className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3.5 text-xs font-bold uppercase tracking-widest text-white shadow-lg hover:bg-primary-dark hover:scale-[1.01] transition-all cursor-pointer"
+                        >
+                          Explorar Loja Online
+                        </button>
+                      </div>
+                    </div>
+                    <div className="lg:col-span-5 relative h-[300px] sm:h-[400px] rounded-2xl overflow-hidden shadow-2xl">
+                      <img 
+                        src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=800&auto=format&fit=crop&q=80" 
+                        alt="Treino Real Elife" 
+                        className="absolute inset-0 h-full w-full object-cover object-center hover:scale-105 transition-transform duration-700"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* Seção Novidades */}
+              <section className="py-16 bg-white">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-10">
+                  <FadeIn direction="up" delay={0.1}>
+                    <div className="space-y-2">
+                      <span className="text-xs font-bold uppercase tracking-widest text-primary">Lançamentos Exclusivos</span>
+                      <h2 className="text-3xl font-extrabold text-deep-teal">Novidades</h2>
+                      <p className="text-sm text-deep-teal/60 font-light max-w-lg mx-auto">
+                        Confira as últimas novidades da Elife, pensadas para trazer frescor e sofisticação à sua rotina ativa.
+                      </p>
+                    </div>
+                  </FadeIn>
+
+                  <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {PRODUCTS_DATA.filter(p => !p.destaque).slice(0, 8).map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        onAddToCart={handleAddToCart}
+                        onQuickView={(p) => navigateTo(`/produto/${p.id}`)}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="pt-6">
+                    <button
+                      onClick={() => navigateTo("/colecao")}
+                      className="inline-flex items-center gap-2 rounded-full bg-deep-teal px-8 py-4 text-xs font-bold uppercase tracking-widest text-white shadow-md hover:bg-[#0f6b64] hover:scale-[1.01] transition-all cursor-pointer"
+                    >
+                      Ver coleção completa
+                      <span>→</span>
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              {/* Feed Instagram */}
+              <section className="py-16 bg-gray-50/30 border-t border-gray-100">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center space-y-10">
+                  <div className="space-y-2">
+                    <span className="text-xs font-bold uppercase tracking-widest text-primary">Siga-nos @elife.activewear</span>
+                    <h2 className="text-3xl font-extrabold text-deep-teal">Inspiração Elife</h2>
+                    <p className="text-sm text-deep-teal/60 font-light max-w-md mx-auto">
+                      Faça parte do nosso estilo de vida ativo. Compartilhe seu treino usando nossas peças.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    {[
+                      "https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=500&auto=format&fit=crop&q=60",
+                      "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=500&auto=format&fit=crop&q=60",
+                      "https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=500&auto=format&fit=crop&q=60",
+                      "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=500&auto=format&fit=crop&q=60",
+                      "https://images.unsplash.com/photo-1485727749690-d091e8284ef3?w=500&auto=format&fit=crop&q=60",
+                      "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&auto=format&fit=crop&q=60"
+                    ].map((imgSrc, index) => (
+                      <a 
+                        key={index}
+                        href="https://instagram.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative aspect-square overflow-hidden rounded-xl bg-gray-100 block shadow-sm hover:shadow-md transition-shadow"
+                      >
+                        <div className="absolute inset-0 bg-deep-teal/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex items-center justify-center">
+                          <Instagram className="h-6 w-6 text-white stroke-[2]" />
+                        </div>
+                        <img 
+                          src={imgSrc} 
+                          alt={`Instagram post ${index + 1}`} 
+                          className="h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                        />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
+              {/* Brand About Segment */}
+              <About />
+            </>
+          );
+        }
+
+        return (
+          <main id="collection" className="flex-1 py-8 md:py-10 bg-gray-50/50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-5">
           
           {/* Section Titles */}
@@ -962,7 +1190,7 @@ export default function App() {
                     key={product.id}
                     product={product}
                     onAddToCart={handleAddToCart}
-                    onQuickView={(p) => setQuickViewProduct(p)}
+                    onQuickView={(p) => navigateTo(`/produto/${p.id}`)}
                   />
                 ))}
               </div>
@@ -987,9 +1215,8 @@ export default function App() {
 
         </div>
       </main>
-
-      {/* Brand About Segment */}
-      <About />
+        );
+      })()}
 
       {/* Floating Shop Quick Indicator for Better UX */}
       {totalCartCount > 0 && !isCartOpen && (
@@ -1019,8 +1246,8 @@ export default function App() {
 
       {/* Quick View Detailed Dialog/Modal */}
       <ProductDetailsModal
-        product={quickViewProduct}
-        onClose={() => setQuickViewProduct(null)}
+        product={urlProduct || quickViewProduct}
+        onClose={handleCloseProductModal}
         onAddToCart={handleAddToCart}
       />
 
