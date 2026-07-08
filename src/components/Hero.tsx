@@ -6,16 +6,26 @@ interface HeroProps {
 
 export default function Hero({ onExploreClick }: HeroProps) {
   return (
-    <section id="home" className="relative overflow-hidden bg-gradient-to-br from-white via-[#f3f6f5] to-[#edf2f0] py-12 md:py-20 lg:py-28">
-      {/* Abstract geometric accents for organic feel */}
-      <div className="absolute top-1/4 right-0 -z-10 h-96 w-96 rounded-full bg-primary/5 blur-3xl" />
-      <div className="absolute bottom-1/4 left-10 -z-10 h-72 w-72 rounded-full bg-accent-magenta/5 blur-3xl" />
+    <section id="home" className="relative overflow-hidden bg-[#f3f6f5] py-12 md:py-20 lg:py-32 min-h-[600px] lg:min-h-[720px] flex items-center">
+      {/* Background Image */}
+      <img
+        src="https://i.ibb.co/G4fFDH2G/elife-hero-page-site.webp"
+        alt="Treino com elegância elife"
+        className="absolute inset-0 h-full w-full object-cover object-[78%_center] lg:object-[right_center] z-0"
+      />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12">
+      {/* Overlay/Gradient to guarantee perfect text contrast and reading */}
+      <div className="absolute inset-0 bg-gradient-to-r from-white via-[#f3f6f5]/95 to-[#f3f6f5]/80 lg:from-white lg:via-[#f3f6f5]/70 lg:to-transparent z-10" />
+
+      {/* Abstract geometric accents for organic feel */}
+      <div className="absolute top-1/4 left-1/3 z-20 h-96 w-96 rounded-full bg-primary/5 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 left-10 z-20 h-72 w-72 rounded-full bg-accent-magenta/5 blur-3xl pointer-events-none" />
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-20 w-full">
+        <div className="grid grid-cols-1 items-center lg:grid-cols-12 gap-12">
           
           {/* Text Content */}
-          <div className="text-center lg:col-span-7 lg:text-left space-y-6">
+          <div className="text-center lg:text-left space-y-6 lg:col-span-7 py-8">
             <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
               <Sparkles className="h-3.5 w-3.5" />
               Nova Coleção Estreante
@@ -51,7 +61,7 @@ export default function Hero({ onExploreClick }: HeroProps) {
             </div>
 
             {/* Microstats / highlights */}
-            <div className="grid grid-cols-3 gap-4 pt-8 border-t border-gray-100 max-w-md mx-auto lg:mx-0">
+            <div className="grid grid-cols-3 gap-4 pt-8 border-t border-deep-teal/10 max-w-md mx-auto lg:mx-0">
               <div>
                 <p className="text-2xl font-bold text-deep-teal">100%</p>
                 <p className="text-xs text-deep-teal/60">Poliamida Premium</p>
@@ -66,34 +76,6 @@ export default function Hero({ onExploreClick }: HeroProps) {
               </div>
             </div>
 
-          </div>
-
-          {/* Editorial Visual Collage */}
-          <div className="relative lg:col-span-5 flex justify-center">
-            <div className="relative w-full max-w-md aspect-[4/5] rounded-2xl overflow-hidden shadow-2xl shadow-deep-teal/10 group">
-              {/* Main Image */}
-              <img
-                src="https://i.ibb.co/Fb0kNH33/macacao-gabriela-01.webp"
-                alt="Treino com elegância elife"
-                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              {/* Overlay styling for elegant atmosphere */}
-              <div className="absolute inset-0 bg-gradient-to-t from-deep-teal/80 via-transparent to-transparent" />
-              
-              {/* Brand card overlaid on image */}
-              <div className="absolute bottom-6 left-6 right-6 rounded-xl bg-white/95 backdrop-blur-sm p-5 shadow-lg space-y-1">
-                <p className="text-[10px] font-bold text-primary uppercase tracking-widest">Estilo elife</p>
-                <p className="text-base font-semibold text-deep-teal">Liberdade & Conforto</p>
-                <p className="text-xs text-deep-teal/70 leading-relaxed font-light">
-                  "O caimento perfeito que abraça o corpo. Sinto-me segura para correr e alongar sem restrições."
-                </p>
-              </div>
-
-              {/* Float Accent Tag */}
-              <div className="absolute top-4 right-4 rounded-full bg-accent-magenta text-white text-[10px] font-bold px-3 py-1 uppercase tracking-widest shadow-md">
-                Renovação
-              </div>
-            </div>
           </div>
 
         </div>
