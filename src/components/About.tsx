@@ -1,4 +1,5 @@
 import { Shield, Heart, Sparkles, Compass } from "lucide-react";
+import FadeIn from "./FadeIn";
 
 export default function About() {
   const pillars = [
@@ -42,37 +43,43 @@ export default function About() {
 
           {/* Text Content Side - positioned on the right */}
           <div className="space-y-8 lg:col-span-7 py-8 text-left">
-            <div className="space-y-3">
-              <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Sobre a elife</h2>
-              <p className="text-3xl font-bold tracking-tight text-deep-teal sm:text-4xl">
-                Elevando seu treino com sofisticação
-              </p>
-            </div>
+            <FadeIn direction="up" delay={0.1} duration={0.8}>
+              <div className="space-y-3">
+                <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Sobre a elife</h2>
+                <p className="text-3xl font-bold tracking-tight text-deep-teal sm:text-4xl">
+                  Elevando seu treino com sofisticação
+                </p>
+              </div>
+            </FadeIn>
 
-            <div className="space-y-4 text-deep-teal/80 font-light leading-relaxed">
-              <p>
-                Nascida em Indaiatuba/SP, a <strong className="font-semibold text-deep-teal">elife</strong> é muito mais do que uma marca de roupas de ginástica. Somos uma comunidade dedicada a promover um estilo de vida ativo com paixão, transformação e empoderamento feminino.
-              </p>
-              <p>
-                Acreditamos que o conforto e a segurança são fundamentais para que você alcance seus objetivos. Nossas peças são desenvolvidas com precisão técnica e um design minimalista, oferecendo liberdade de movimento sem abrir mão da elegância que define sua essência.
-              </p>
-            </div>
+            <FadeIn direction="up" delay={0.2} duration={0.8}>
+              <div className="space-y-4 text-deep-teal/80 font-light leading-relaxed">
+                <p>
+                  Nascida em Indaiatuba/SP, a <strong className="font-semibold text-deep-teal">elife</strong> é muito mais do que uma marca de roupas de ginástica. Somos uma comunidade dedicada a promover um estilo de vida ativo com paixão, transformação e empoderamento feminino.
+                </p>
+                <p>
+                  Acreditamos que o conforto e a segurança são fundamentais para que você alcance seus objetivos. Nossas peças são desenvolvidas com precisão técnica e um design minimalista, oferecendo liberdade de movimento sem abrir mão da elegância que define sua essência.
+                </p>
+              </div>
+            </FadeIn>
 
             {/* Core Pillars */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
-              {pillars.map((pillar, idx) => (
-                <div 
-                  key={idx} 
-                  className="rounded-xl border border-deep-teal/10 bg-white/75 backdrop-blur-sm p-5 space-y-3 hover:shadow-md transition-shadow duration-300"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
-                    {pillar.icon}
+            <FadeIn direction="up" delay={0.3} duration={0.8}>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
+                {pillars.map((pillar, idx) => (
+                  <div 
+                    key={idx} 
+                    className="rounded-xl border border-deep-teal/10 bg-white/75 backdrop-blur-sm p-5 space-y-3 hover:shadow-md transition-shadow duration-300"
+                  >
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+                      {pillar.icon}
+                    </div>
+                    <h3 className="text-xs font-bold text-deep-teal uppercase tracking-widest">{pillar.title}</h3>
+                    <p className="text-xs text-deep-teal/70 font-light leading-relaxed">{pillar.desc}</p>
                   </div>
-                  <h3 className="text-xs font-bold text-deep-teal uppercase tracking-widest">{pillar.title}</h3>
-                  <p className="text-xs text-deep-teal/70 font-light leading-relaxed">{pillar.desc}</p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </FadeIn>
 
           </div>
 

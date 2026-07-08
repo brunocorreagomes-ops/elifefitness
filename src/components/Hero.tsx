@@ -1,4 +1,5 @@
 import { ArrowRight, Sparkles } from "lucide-react";
+import FadeIn from "./FadeIn";
 
 interface HeroProps {
   onExploreClick: () => void;
@@ -26,55 +27,65 @@ export default function Hero({ onExploreClick }: HeroProps) {
           
           {/* Text Content */}
           <div className="text-center lg:text-left space-y-6 lg:col-span-7 py-8">
-            <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
-              <Sparkles className="h-3.5 w-3.5" />
-              Nova Coleção Estreante
-            </div>
+            <FadeIn direction="up" delay={0.1} duration={0.8}>
+              <div className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary">
+                <Sparkles className="h-3.5 w-3.5" />
+                Nova Coleção Estreante
+              </div>
+            </FadeIn>
             
-            <h1 className="text-4xl font-bold tracking-tight text-deep-teal sm:text-5xl md:text-6xl lg:leading-[1.1]">
-              Activate Your <br className="hidden sm:inline" />
-              <span className="text-primary relative inline-block">
-                Moves
-                <span className="absolute bottom-1 left-0 h-2 w-full bg-accent-magenta/20 -z-10 rounded" />
-              </span>
-            </h1>
+            <FadeIn direction="up" delay={0.2} duration={0.8}>
+              <h1 className="text-4xl font-bold tracking-tight text-deep-teal sm:text-5xl md:text-6xl lg:leading-[1.1]">
+                Activate Your <br className="hidden sm:inline" />
+                <span className="text-primary relative inline-block">
+                  Moves
+                  <span className="absolute bottom-1 left-0 h-2 w-full bg-accent-magenta/20 -z-10 rounded" />
+                </span>
+              </h1>
+            </FadeIn>
 
-            <p className="mx-auto max-w-xl text-base text-deep-teal/80 sm:text-lg md:text-xl lg:mx-0 font-light leading-relaxed">
-              Performance e elegância em cada movimento. Descubra uma nova coleção projetada para acompanhar sua rotina ativa com absoluto conforto, segurança invisível e estilo atemporal. Desenvolvido localmente em Indaiatuba/SP.
-            </p>
+            <FadeIn direction="up" delay={0.3} duration={0.8}>
+              <p className="mx-auto max-w-xl text-base text-deep-teal/80 sm:text-lg md:text-xl lg:mx-0 font-light leading-relaxed">
+                Performance e elegância em cada movimento. Descubra uma nova coleção projetada para acompanhar sua rotina active com absoluto conforto, segurança invisível e estilo atemporal. Desenvolvido localmente em Indaiatuba/SP.
+              </p>
+            </FadeIn>
 
-            <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
-              <button
-                id="hero-cta-btn"
-                onClick={onExploreClick}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-8 py-4 text-base font-semibold text-white shadow-lg shadow-primary/20 hover:bg-primary-dark transition-all duration-300 hover:scale-[1.02] cursor-pointer"
-              >
-                Ver Coleção
-                <ArrowRight className="h-5 w-5" />
-              </button>
-              <a
-                href="#about"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-deep-teal/20 bg-white/50 px-8 py-4 text-base font-semibold text-deep-teal hover:bg-white hover:border-deep-teal transition-all duration-300 cursor-pointer"
-              >
-                Nossa Essência
-              </a>
-            </div>
+            <FadeIn direction="up" delay={0.4} duration={0.8}>
+              <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4 pt-4">
+                <button
+                  id="hero-cta-btn"
+                  onClick={onExploreClick}
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-8 py-4 text-base font-semibold text-white shadow-lg shadow-primary/20 hover:bg-primary-dark transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+                >
+                  Ver Coleção
+                  <ArrowRight className="h-5 w-5" />
+                </button>
+                <a
+                  href="#about"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border-2 border-deep-teal/20 bg-white/50 px-8 py-4 text-base font-semibold text-deep-teal hover:bg-white hover:border-deep-teal transition-all duration-300 cursor-pointer"
+                >
+                  Nossa Essência
+                </a>
+              </div>
+            </FadeIn>
 
             {/* Microstats / highlights */}
-            <div className="grid grid-cols-3 gap-4 pt-8 border-t border-deep-teal/10 max-w-md mx-auto lg:mx-0">
-              <div>
-                <p className="text-2xl font-bold text-deep-teal">100%</p>
-                <p className="text-xs text-deep-teal/60">Poliamida Premium</p>
+            <FadeIn direction="up" delay={0.5} duration={0.8}>
+              <div className="grid grid-cols-3 gap-4 pt-8 border-t border-deep-teal/10 max-w-md mx-auto lg:mx-0">
+                <div>
+                  <p className="text-2xl font-bold text-deep-teal">100%</p>
+                  <p className="text-xs text-deep-teal/60">Poliamida Premium</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-deep-teal">Zero</p>
+                  <p className="text-xs text-deep-teal/60">Transparência</p>
+                </div>
+                <div>
+                  <p className="text-2xl font-bold text-deep-teal">Indaiatuba</p>
+                  <p className="text-xs text-deep-teal/60">Produção Local</p>
+                </div>
               </div>
-              <div>
-                <p className="text-2xl font-bold text-deep-teal">Zero</p>
-                <p className="text-xs text-deep-teal/60">Transparência</p>
-              </div>
-              <div>
-                <p className="text-2xl font-bold text-deep-teal">Indaiatuba</p>
-                <p className="text-xs text-deep-teal/60">Produção Local</p>
-              </div>
-            </div>
+            </FadeIn>
 
           </div>
 

@@ -13,7 +13,7 @@ export default function Header({ cartCount, onCartClick, onNavigate, activeSecti
 
   const navItems = [
     { label: "Início", id: "home" },
-    { label: "Coleção", id: "collection" },
+    { label: "LOJA ONLINE", id: "collection" },
     { label: "Sobre", id: "about" },
     { label: "Contato", id: "contact" }
   ];
@@ -88,7 +88,7 @@ export default function Header({ cartCount, onCartClick, onNavigate, activeSecti
         {/* Actions (Cart & Support text link) */}
         <div className="flex flex-1 items-center justify-end gap-3">
           <a
-            href="https://wa.me/5519999999999" // Replace with actual WhatsApp if provided
+            href="https://wa.me/5519991079898"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden lg:flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-deep-teal/60 hover:text-primary transition-colors py-2 px-3 border border-gray-100 rounded-full hover:border-primary/20"
@@ -145,7 +145,7 @@ export default function Header({ cartCount, onCartClick, onNavigate, activeSecti
             
             <div className="space-y-3">
               <a
-                href="https://wa.me/5519999999999"
+                href="https://wa.me/5519991079898"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-deep-teal/80 hover:text-primary transition-colors"

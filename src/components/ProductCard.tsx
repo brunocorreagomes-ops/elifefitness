@@ -61,7 +61,7 @@ export default function ProductCard({ product, onAddToCart, onQuickView }: Produ
 
   return (
     <div 
-      className="group relative flex flex-col overflow-hidden rounded-xl bg-white border border-gray-100 hover:shadow-xl hover:border-gray-200 transition-all duration-300"
+      className="group relative flex flex-col overflow-hidden rounded-xl bg-white border border-gray-100 hover:shadow-xl hover:border-gray-200 hover:-translate-y-1.5 transition-all duration-300"
     >
       {/* Upper Badge & Image Container */}
       <div 
