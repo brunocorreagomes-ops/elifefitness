@@ -1,7 +1,8 @@
 import React from "react";
-import { Search, Sparkles, Filter, RefreshCw, ShoppingBag, SlidersHorizontal, ArrowUpDown, X, Check, Eye, Tag, TrendingUp, Clock, Percent } from "lucide-react";
+import { Search, Sparkles, Filter, RefreshCw, ShoppingBag, SlidersHorizontal, ArrowUpDown, X, Check, Eye, Tag, TrendingUp, Clock, Percent, MessageSquare, Truck } from "lucide-react";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
+import CategoryGrid from "./components/CategoryGrid";
 import About from "./components/About";
 import ProductCard from "./components/ProductCard";
 import ProductDetailsModal from "./components/ProductDetailsModal";
@@ -352,6 +353,53 @@ export default function App() {
 
       {/* Hero Section */}
       <Hero onExploreClick={() => handleNavigate("collection")} />
+
+      {/* Trust Strip (Faixa de Confiança) */}
+      <div className="bg-white border-y border-gray-100 py-6 sm:py-8">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 divide-y md:divide-y-0 md:divide-x divide-gray-100">
+            
+            <div className="flex items-center gap-4 py-2 md:py-0 md:px-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
+                <MessageSquare className="h-5.5 w-5.5" />
+              </div>
+              <div className="text-left">
+                <h4 className="text-sm font-bold text-deep-teal">Atendimento direto pelo WhatsApp</h4>
+                <p className="text-xs text-deep-teal/60 font-light mt-0.5">Suporte rápido e humanizado para suas compras</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 pt-4 md:pt-0 md:px-8">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
+                <Truck className="h-5.5 w-5.5" />
+              </div>
+              <div className="text-left">
+                <h4 className="text-sm font-bold text-deep-teal">Pronta entrega em Indaiatuba</h4>
+                <p className="text-xs text-deep-teal/60 font-light mt-0.5">Receba suas peças preferidas de forma imediata</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 pt-4 md:pt-0 md:px-8">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary shrink-0">
+                <Sparkles className="h-5.5 w-5.5" />
+              </div>
+              <div className="text-left">
+                <h4 className="text-sm font-bold text-deep-teal">Peças selecionadas para treino real</h4>
+                <p className="text-xs text-deep-teal/60 font-light mt-0.5">Testadas para oferecer zero transparência e alta durabilidade</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      {/* Category Grid (Categorias por imagem) */}
+      <CategoryGrid 
+        onCategorySelect={(category) => {
+          setSelectedCategory(category);
+          handleNavigate("collection");
+        }} 
+      />
 
       {/* Main Catalog Section */}
       <main id="collection" className="flex-1 py-8 md:py-10 bg-gray-50/50">
